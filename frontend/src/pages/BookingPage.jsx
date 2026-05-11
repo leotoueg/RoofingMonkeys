@@ -131,7 +131,7 @@ export default function BookingPage() {
       });
 
       setIsBooked(true);
-      toast.success("Appointment booked successfully!");
+      toast.success("Appointment requested!");
 
       sessionStorage.removeItem("leadData");
     } catch (error) {
@@ -152,7 +152,7 @@ export default function BookingPage() {
         project_type: leadData?.projectType || "unknown",
       });
       setIsBooked(true);
-      toast.success("Appointment booked successfully!");
+      toast.success("Appointment requested!");
       sessionStorage.removeItem("leadData");
     } finally {
       setIsBooking(false);
@@ -166,12 +166,12 @@ export default function BookingPage() {
           <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-green-600" />
           </div>
-          <h1 className="text-3xl font-bold text-[#0F4A9C] mb-4">You're All Set!</h1>
+          <h1 className="text-3xl font-bold text-[#0F4A9C] mb-4">Appointment requested!</h1>
           <p className="text-[#475569] mb-6">
-            Your consultation is booked for <strong>{selectedDay?.fullDate}</strong> at <strong>{selectedTime}</strong>.
+            Your consultation is requested for <strong>{selectedDay?.fullDate}</strong> at <strong>{selectedTime}</strong>.
           </p>
           <p className="text-[#475569] mb-8">
-            One of our roofing specialists will contact you to confirm your appointment and answer any questions.
+            A member of our team will reach out shortly to confirm your appointment request. It is important you confirm your appointment due to high volume of requests.
           </p>
           <div className="space-y-4">
             <Button
