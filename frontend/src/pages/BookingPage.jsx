@@ -6,8 +6,8 @@ import { toast } from "sonner";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
-// Webhook URL — wired up later. Booking still works locally via sessionStorage.
-const BOOKING_WEBHOOK_URL = "";
+// Appointment booking webhook (LeadConnector)
+const BOOKING_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxovpPbrakSW/webhook-trigger/8ceeffea-ae53-4aea-aa15-324089d9b91c";
 
 // GTM DataLayer helper
 const pushToDataLayer = (event, data = {}) => {
@@ -70,12 +70,18 @@ export default function BookingPage() {
     }
   }, []);
 
-  const handleCallClick = () => {
+  const handleCallClick = (sourceLocation = "header") => {
     pushToDataLayer("click_call_button", {
       event_category: "Engagement",
       event_label: "Click to Call",
       phone_number: PHONE_NUMBER,
       page: "booking",
+      location: sourceLocation,
+    });
+    pushToDataLayer("phone_call_click", {
+      phone_number: PHONE_NUMBER,
+      page: "booking",
+      location: sourceLocation,
     });
     window.location.href = PHONE_HREF;
   };
@@ -114,6 +120,14 @@ export default function BookingPage() {
         appointment_date: selectedDay.fullDate,
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
+        page: "booking",
+      });
+      pushToDataLayer("schedule", {
+        currency: "CAD",
+        value: 0,
+        appointment_date: selectedDay.fullDate,
+        appointment_time: selectedTime,
+        project_type: leadData?.projectType || "unknown",
       });
 
       setIsBooked(true);
@@ -125,6 +139,14 @@ export default function BookingPage() {
       pushToDataLayer("book_appointment", {
         event_category: "Conversion",
         event_label: "Appointment Booked",
+        appointment_date: selectedDay.fullDate,
+        appointment_time: selectedTime,
+        project_type: leadData?.projectType || "unknown",
+        page: "booking",
+      });
+      pushToDataLayer("schedule", {
+        currency: "CAD",
+        value: 0,
         appointment_date: selectedDay.fullDate,
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
@@ -153,7 +175,7 @@ export default function BookingPage() {
           </p>
           <div className="space-y-4">
             <Button
-              onClick={handleCallClick}
+              onClick={() => handleCallClick("booked_success")}
               data-testid="booked-call-button"
               className="w-full h-12 bg-[#1D67CD] hover:bg-[#1854A8] text-white font-semibold rounded-full flex items-center justify-center gap-2"
             >
@@ -189,7 +211,7 @@ export default function BookingPage() {
           </button>
           <h2 className="text-white text-lg font-bold">Roofing Monkeys</h2>
           <button
-            onClick={handleCallClick}
+            onClick={() => handleCallClick("booking_header")}
             className="flex items-center gap-2 text-[#59C8EE] hover:text-white transition-colors font-semibold"
             data-testid="header-call-booking"
           >

@@ -9,8 +9,8 @@ import { toast } from "sonner";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
-// Webhook URL — leave empty for now; backend /api/lead endpoint will be wired up later.
-const FORM_WEBHOOK_URL = "";
+// Form submission webhook (LeadConnector)
+const FORM_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxovpPbrakSW/webhook-trigger/a98af371-4fca-4209-ba78-63c1ed1d8862";
 
 // Brand assets
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4qmsoeue_RMLogo.jpg";
@@ -102,10 +102,17 @@ export default function LandingPage() {
         });
       }
 
-      // Push GTM dataLayer event
+      // Push GTM dataLayer event (canonical + GA4 standard)
       pushToDataLayer("form_submit", {
         event_category: "Lead",
         event_label: "Lead Form Submission",
+        form_name: "lead_capture",
+        project_type: formData.projectType,
+        page: "landing",
+      });
+      pushToDataLayer("generate_lead", {
+        currency: "CAD",
+        value: 0,
         form_name: "lead_capture",
         project_type: formData.projectType,
       });
@@ -127,6 +134,13 @@ export default function LandingPage() {
         event_label: "Lead Form Submission",
         form_name: "lead_capture",
         project_type: formData.projectType,
+        page: "landing",
+      });
+      pushToDataLayer("generate_lead", {
+        currency: "CAD",
+        value: 0,
+        form_name: "lead_capture",
+        project_type: formData.projectType,
       });
       toast.success("Thank you! Redirecting to book your consultation...");
       setTimeout(() => {
@@ -137,12 +151,19 @@ export default function LandingPage() {
     }
   };
 
-  const handleCallClick = () => {
+  const handleCallClick = (sourceLocation = "header") => {
     pushToDataLayer("click_call_button", {
       event_category: "Engagement",
       event_label: "Click to Call",
       phone_number: PHONE_NUMBER,
       page: "landing",
+      location: sourceLocation,
+    });
+    // Also push the GA4-standard contact event so it shows up either way
+    pushToDataLayer("phone_call_click", {
+      phone_number: PHONE_NUMBER,
+      page: "landing",
+      location: sourceLocation,
     });
     window.location.href = PHONE_HREF;
   };
@@ -164,7 +185,7 @@ export default function LandingPage() {
             </span>
           </a>
           <button
-            onClick={handleCallClick}
+            onClick={() => handleCallClick("header")}
             data-testid="header-call-button"
             className="btn-cta flex items-center gap-2 text-sm md:text-base"
           >
@@ -646,7 +667,7 @@ export default function LandingPage() {
               Schedule My Free Consultation
             </Button>
             <Button
-              onClick={handleCallClick}
+              onClick={() => handleCallClick("final_cta")}
               data-testid="final-cta-call-button"
               className="btn-blue text-lg px-8 flex items-center justify-center gap-2"
             >
@@ -670,7 +691,7 @@ export default function LandingPage() {
             </a>
           </div>
           <p className="text-white/70 mb-4">Roofing Toronto · Mississauga · Vaughan · Brampton · Markham &amp; the rest of the GTA</p>
-          <a href={PHONE_HREF} className="text-[#59C8EE] font-semibold text-lg hover:underline" data-testid="footer-phone">{PHONE_NUMBER}</a>
+          <a href={PHONE_HREF} className="text-[#59C8EE] font-semibold text-lg hover:underline" data-testid="footer-phone" onClick={(e) => { e.preventDefault(); handleCallClick("footer"); }}>{PHONE_NUMBER}</a>
           <p className="text-white/50 text-sm mt-6">© {new Date().getFullYear()} Roofing Monkeys. All rights reserved.</p>
         </div>
       </footer>
@@ -679,7 +700,7 @@ export default function LandingPage() {
       <div className="sticky-mobile-bar md:hidden" data-testid="sticky-mobile-bar">
         <div className="flex gap-3">
           <Button
-            onClick={handleCallClick}
+            onClick={() => handleCallClick("sticky_mobile")}
             data-testid="mobile-call-button"
             className="flex-1 h-12 bg-[#043061] hover:bg-[#021f40] text-white font-semibold rounded-full flex items-center justify-center gap-2"
           >

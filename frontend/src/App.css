@@ -191,7 +191,7 @@
 }
 
 @media (min-width: 768px) {
-  .marquee-card { width: 26rem; height: 17rem; }
+  .marquee-card { width: 20rem; height: 24rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
