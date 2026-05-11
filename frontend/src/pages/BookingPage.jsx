@@ -235,19 +235,19 @@ export default function BookingPage() {
             {availableDays.map((day, i) => (
               <button
                 key={i}
-                onClick={() => setSelectedDay(day)}
+                onClick={() => setSelectedDay({ ...day, _idx: i })}
                 data-testid={`day-slot-${i}`}
                 className={`calendar-day text-center ${
-                  selectedDay?.dayNumber === day.dayNumber ? "selected" : ""
+                  selectedDay?._idx === i ? "selected" : ""
                 }`}
               >
-                <p className={`text-xs font-medium ${selectedDay?.dayNumber === day.dayNumber ? "text-white/80" : "text-[#94A3B8]"}`}>
+                <p className={`text-xs font-medium ${selectedDay?._idx === i ? "text-white/80" : "text-[#94A3B8]"}`}>
                   {day.dayName}
                 </p>
-                <p className={`text-xl font-bold ${selectedDay?.dayNumber === day.dayNumber ? "text-white" : "text-[#0F172A]"}`}>
+                <p className={`text-xl font-bold ${selectedDay?._idx === i ? "text-white" : "text-[#0F172A]"}`}>
                   {day.dayNumber}
                 </p>
-                <p className={`text-xs ${selectedDay?.dayNumber === day.dayNumber ? "text-white/80" : "text-[#94A3B8]"}`}>
+                <p className={`text-xs ${selectedDay?._idx === i ? "text-white/80" : "text-[#94A3B8]"}`}>
                   {day.monthName}
                 </p>
               </button>
