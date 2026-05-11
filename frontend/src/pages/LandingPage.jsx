@@ -22,13 +22,13 @@ const pushToDataLayer = (event, data = {}) => {
   window.dataLayer.push({ event, ...data });
 };
 
-// Project images. Real Roofing Monkeys photos where available; placeholders otherwise.
+// Real Roofing Monkeys project photos
 const projectImages = [
-  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/aane7i05_shingles.jpg", alt: "Roofing Monkeys crew installing shingles in the GTA" },
-  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4aa04gmd_flatroof.jpg", alt: "Flat roof installation by Roofing Monkeys" },
-  { url: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=900&q=70", alt: "Two-storey home with newly installed pitched roof" },
-  { url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=900&q=70", alt: "Residential home with multi-gable shingle roof" },
-  { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=70", alt: "Modern home with low-slope roof" },
+  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/aane7i05_shingles.jpg", alt: "Roofing Monkeys crew installing shingles", caption: "Shingle installation — Toronto" },
+  { url: "/projects/rm-project-2.jpg", alt: "Crew installing IKO Cambridge architectural shingles in the GTA", caption: "IKO Cambridge shingles — GTA" },
+  { url: "/projects/rm-project-3.jpg", alt: "Roofer performing shingle tear-off on a wooden roof deck", caption: "Full tear-off & deck prep" },
+  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4aa04gmd_flatroof.jpg", alt: "Flat roof installation by Roofing Monkeys", caption: "Flat roof replacement" },
+  { url: "/projects/rm-project-1.jpg", alt: "Roof replacement job site with Roofing Monkeys dumpster", caption: "Full residential replacement" },
 ];
 
 // Testimonials - Google Reviews (sourced from public reviews of Roofing Monkeys)
@@ -498,12 +498,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Project Showcase Section */}
+      {/* Project Showcase Section — auto-scrolling horizontal gallery */}
       <section className="section-padding bg-[#F9F8FD]" data-testid="showcase-section">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 px-4">
             <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Our Work</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mt-4 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-[#043061] mt-4 mb-4">
               Recent Roofing Projects
             </h2>
             <p className="text-lg text-[#475569]">
@@ -511,24 +511,23 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            {projectImages.map((img, i) => (
-              <div
-                key={i}
-                className={`project-image ${i === 0 ? "col-span-2 row-span-2" : ""}`}
-                data-testid={`project-image-${i}`}
-              >
-                <img
-                  src={img.url}
-                  alt={img.alt}
-                  className={`w-full ${i === 0 ? "h-full min-h-[300px] md:min-h-[400px]" : "h-48 md:h-64"} object-cover`}
-                  loading="lazy"
-                />
-              </div>
-            ))}
+          <div className="marquee" data-testid="project-marquee" aria-label="Recent roofing projects, auto-scrolling gallery">
+            <div className="marquee-track">
+              {[...projectImages, ...projectImages].map((img, i) => (
+                <figure
+                  key={i}
+                  className="marquee-card"
+                  data-testid={i < projectImages.length ? `project-image-${i}` : undefined}
+                  aria-hidden={i >= projectImages.length ? "true" : undefined}
+                >
+                  <img src={img.url} alt={img.alt} loading="lazy" />
+                  <figcaption className="marquee-caption">{img.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
           </div>
 
-          <p className="text-center text-[#475569] mt-8">
+          <p className="text-center text-[#475569] mt-8 px-4">
             Every roof is built to handle Toronto's snow, ice and summer storms.
           </p>
         </div>
