@@ -15,8 +15,19 @@ const pushToDataLayer = (event, data = {}) => {
   window.dataLayer.push({ event, ...data });
 };
 
-// Available time slots
-const TIME_SLOTS = ["9:00 AM", "6:00 PM"];
+// Available time slots — 9 AM to 6 PM, hourly
+const TIME_SLOTS = [
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+  "6:00 PM",
+];
 
 // Generate next available booking days (Mon–Sat, up to 7 days out, skip Sundays)
 const getAvailableDays = () => {
@@ -263,7 +274,7 @@ export default function BookingPage() {
                 </h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 mb-8">
+              <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-8">
                 {TIME_SLOTS.map((time, i) => (
                   <button
                     key={i}
