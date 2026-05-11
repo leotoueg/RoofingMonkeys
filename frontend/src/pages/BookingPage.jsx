@@ -16,29 +16,28 @@ const pushToDataLayer = (event, data = {}) => {
 };
 
 // Available time slots
-const TIME_SLOTS = ["10:00 AM", "2:00 PM", "6:00 PM"];
+const TIME_SLOTS = ["9:00 AM", "6:00 PM"];
 
-// Generate next 4 weekdays (skip Sundays)
+// Generate next available booking days (Mon–Sat, up to 7 days out, skip Sundays)
 const getAvailableDays = () => {
   const days = [];
   const today = new Date();
-  let count = 0;
 
-  while (days.length < 4) {
+  for (let offset = 0; offset < 7; offset++) {
     const date = new Date(today);
-    date.setDate(today.getDate() + count);
+    date.setDate(today.getDate() + offset);
     const dayOfWeek = date.getDay();
 
-    if (dayOfWeek !== 0) {
-      days.push({
-        date: date,
-        dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
-        dayNumber: date.getDate(),
-        monthName: date.toLocaleDateString("en-US", { month: "short" }),
-        fullDate: date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
-      });
-    }
-    count++;
+    // Skip Sunday (0)
+    if (dayOfWeek === 0) continue;
+
+    days.push({
+      date: date,
+      dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
+      dayNumber: date.getDate(),
+      monthName: date.toLocaleDateString("en-US", { month: "short" }),
+      fullDate: date.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
+    });
   }
 
   return days;
@@ -231,7 +230,7 @@ export default function BookingPage() {
           </div>
 
           {/* Day Selection */}
-          <div className="grid grid-cols-4 gap-3 mb-8">
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-8">
             {availableDays.map((day, i) => (
               <button
                 key={i}
@@ -264,7 +263,7 @@ export default function BookingPage() {
                 </h3>
               </div>
 
-              <div className="grid grid-cols-3 gap-3 mb-8">
+              <div className="grid grid-cols-2 gap-3 mb-8">
                 {TIME_SLOTS.map((time, i) => (
                   <button
                     key={i}
