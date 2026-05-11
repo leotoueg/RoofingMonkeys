@@ -12,19 +12,23 @@ const PHONE_HREF = "tel:+16479541671";
 // Webhook URL — leave empty for now; backend /api/lead endpoint will be wired up later.
 const FORM_WEBHOOK_URL = "";
 
+// Brand assets
+const LOGO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4qmsoeue_RMLogo.jpg";
+const LOGO_HERO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/i95qpl6g_rmlogohero.png";
+
 // GTM DataLayer helper
 const pushToDataLayer = (event, data = {}) => {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event, ...data });
 };
 
-// Placeholder roofing project images. Replace with real Roofing Monkeys photos later.
+// Project images. Real Roofing Monkeys photos where available; placeholders otherwise.
 const projectImages = [
-  { url: "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1400&q=70", alt: "Modern home with newly installed roof in the GTA" },
-  { url: "https://images.unsplash.com/photo-1605152276897-4f618f831968?auto=format&fit=crop&w=900&q=70", alt: "Beautiful home with new shingle roof" },
-  { url: "https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&w=900&q=70", alt: "Roofer working on a residential roof" },
-  { url: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=900&q=70", alt: "Two-storey home with asphalt shingle roof" },
-  { url: "https://images.unsplash.com/photo-1592595896616-c37162298647?auto=format&fit=crop&w=900&q=70", alt: "Roof inspection and repair" },
+  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/aane7i05_shingles.jpg", alt: "Roofing Monkeys crew installing shingles in the GTA" },
+  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4aa04gmd_flatroof.jpg", alt: "Flat roof installation by Roofing Monkeys" },
+  { url: "https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=900&q=70", alt: "Two-storey home with newly installed pitched roof" },
+  { url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=900&q=70", alt: "Residential home with multi-gable shingle roof" },
+  { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=70", alt: "Modern home with low-slope roof" },
 ];
 
 // Testimonials - Google Reviews (sourced from public reviews of Roofing Monkeys)
@@ -152,11 +156,11 @@ export default function LandingPage() {
       {/* White Navbar */}
       <nav className="bg-white shadow-md sticky top-0 z-50" data-testid="navbar">
         <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
-          <a href="/" className="brand-wordmark" data-testid="brand-logo" aria-label="Roofing Monkeys home">
-            <span className="brand-icon">RM</span>
-            <span>
-              <span className="brand-name">Roofing Monkeys</span>
-              <span className="brand-sub">Greater Toronto Area</span>
+          <a href="/" className="brand-logo-img" data-testid="brand-logo" aria-label="Roofing Monkeys home">
+            <img src={LOGO_URL} alt="Roofing Monkeys logo" />
+            <span className="brand-text">
+              <span className="name">Roofing Monkeys</span>
+              <span className="sub">Greater Toronto Area</span>
             </span>
           </a>
           <button
@@ -218,115 +222,133 @@ export default function LandingPage() {
               <div className="mt-8 hidden lg:block">
                 <p className="text-sm text-white/70 uppercase tracking-widest mb-3">Why GTA Homeowners Trust Us</p>
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
-                    <div className="text-3xl font-bold text-white">4.9★</div>
-                    <div className="text-xs text-white/70 mt-1 leading-tight">Google Rating</div>
+                  <div className="hero-stat-card" data-testid="stat-google">
+                    <div className="stat-value">4.9★</div>
+                    <div className="stat-label">Google Rating</div>
                   </div>
-                  <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
-                    <div className="text-3xl font-bold text-white">500+</div>
-                    <div className="text-xs text-white/70 mt-1 leading-tight">Roofs Installed</div>
+                  <div className="hero-stat-card" data-testid="stat-roofs">
+                    <div className="stat-value">500+</div>
+                    <div className="stat-label">Roofs Installed</div>
                   </div>
-                  <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-5 text-center">
-                    <div className="text-3xl font-bold text-white">1–3</div>
-                    <div className="text-xs text-white/70 mt-1 leading-tight">Day Turnaround</div>
+                  <div className="hero-stat-card" data-testid="stat-turnaround">
+                    <div className="stat-value">1–3</div>
+                    <div className="stat-label">Day Turnaround</div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Right Column - Form */}
-            <div id="lead-form" className="form-card p-6 md:p-8 animate-fade-in-up animation-delay-200">
-              <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-[#0F4A9C] mb-2">Get Your Free Roof Estimate</h3>
-                <p className="text-[#475569]">Takes 30 seconds • No obligation</p>
+            <div id="lead-form" className="animate-fade-in-up animation-delay-200">
+              {/* Social-proof chip */}
+              <div className="flex justify-center mb-3">
+                <div className="social-proof-chip" data-testid="social-proof-chip">
+                  <span className="flex items-center gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3.5 h-3.5" fill="currentColor" />
+                    ))}
+                  </span>
+                  <span className="font-semibold">4.9 on Google</span>
+                  <span className="dot" />
+                  <span>500+ GTA Roofs</span>
+                  <span className="dot" />
+                  <span className="flex items-center gap-1"><Shield className="w-3.5 h-3.5" /> Licensed &amp; Insured</span>
+                </div>
               </div>
 
-              <form onSubmit={handleFormSubmit} className="space-y-4">
-                <div>
-                  <Label htmlFor="name" className="text-[#0F172A] font-medium">Full Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Your full name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    data-testid="input-name"
-                    className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
-                  />
+              <div className="form-card p-6 md:p-8">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold text-[#043061] mb-2">Get Your Free Roof Estimate</h3>
+                  <p className="text-[#475569]">Takes 30 seconds • No obligation</p>
                 </div>
 
-                <div>
-                  <Label htmlFor="phone" className="text-[#0F172A] font-medium">Phone Number</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="(416) 555-1234"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    data-testid="input-phone"
-                    className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
-                  />
-                </div>
+                <form onSubmit={handleFormSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="name" className="text-[#0F172A] font-medium">Full Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      placeholder="Your full name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      data-testid="input-name"
+                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="email" className="text-[#0F172A] font-medium">Email Address</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="you@email.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    data-testid="input-email"
-                    className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
-                  />
-                </div>
+                  <div>
+                    <Label htmlFor="phone" className="text-[#0F172A] font-medium">Phone Number</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="(416) 555-1234"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      data-testid="input-phone"
+                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                    />
+                  </div>
 
-                <div>
-                  <Label htmlFor="address" className="text-[#0F172A] font-medium">Property Address</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    type="text"
-                    placeholder="123 Main St, Toronto, ON"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    data-testid="input-address"
-                    className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
-                  />
-                </div>
+                  <div>
+                    <Label htmlFor="email" className="text-[#0F172A] font-medium">Email Address</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="you@email.com"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      data-testid="input-email"
+                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                    />
+                  </div>
 
-                <div>
-                  <Label className="text-[#0F172A] font-medium">Service Needed</Label>
-                  <Select onValueChange={handleSelectChange} value={formData.projectType}>
-                    <SelectTrigger data-testid="select-project-type" className="mt-1 h-12 border-slate-200">
-                      <SelectValue placeholder="Select the service you need" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="shingles">Shingles (New Roof / Replacement)</SelectItem>
-                      <SelectItem value="roof-repair">Roof Repair</SelectItem>
-                      <SelectItem value="flat-roof">Flat Roof</SelectItem>
-                      <SelectItem value="metal-roof">Metal Roof</SelectItem>
-                      <SelectItem value="emergency">Emergency Repair</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                  <div>
+                    <Label htmlFor="address" className="text-[#0F172A] font-medium">Property Address</Label>
+                    <Input
+                      id="address"
+                      name="address"
+                      type="text"
+                      placeholder="123 Main St, Toronto, ON"
+                      value={formData.address}
+                      onChange={handleInputChange}
+                      data-testid="input-address"
+                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                    />
+                  </div>
 
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  data-testid="submit-form-button"
-                  className="w-full h-14 text-lg font-semibold bg-[#1D67CD] hover:bg-[#1854A8] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
-                >
-                  {isSubmitting ? "Submitting..." : "Get My Free Quote"}
-                </Button>
-              </form>
+                  <div>
+                    <Label className="text-[#0F172A] font-medium">Service Needed</Label>
+                    <Select onValueChange={handleSelectChange} value={formData.projectType}>
+                      <SelectTrigger data-testid="select-project-type" className="mt-1 h-12 border-slate-200">
+                        <SelectValue placeholder="Select the service you need" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="shingles">Shingles (New Roof / Replacement)</SelectItem>
+                        <SelectItem value="roof-repair">Roof Repair</SelectItem>
+                        <SelectItem value="flat-roof">Flat Roof</SelectItem>
+                        <SelectItem value="metal-roof">Metal Roof</SelectItem>
+                        <SelectItem value="emergency">Emergency Repair</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-              <p className="text-center text-sm text-[#94A3B8] mt-4">
-                Serious inquiries only — limited availability each month.
-              </p>
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    data-testid="submit-form-button"
+                    className="w-full h-14 text-lg font-semibold bg-[#1D67CD] hover:bg-[#1854A8] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+                  >
+                    {isSubmitting ? "Submitting..." : "Get My Free Quote"}
+                  </Button>
+                </form>
+
+                <p className="text-center text-sm text-[#94A3B8] mt-4">
+                  Serious inquiries only — limited availability each month.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -334,17 +356,17 @@ export default function LandingPage() {
           <div className="mt-12 lg:hidden">
             <p className="text-sm text-white/70 uppercase tracking-widest mb-3">Why GTA Homeowners Trust Us</p>
             <div className="grid grid-cols-3 gap-3">
-              <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-4 text-center">
-                <div className="text-2xl font-bold text-white">4.9★</div>
-                <div className="text-[10px] text-white/70 mt-1 leading-tight">Google Rating</div>
+              <div className="hero-stat-card" style={{padding: "0.9rem"}}>
+                <div className="stat-value" style={{fontSize: "1.4rem"}}>4.9★</div>
+                <div className="stat-label" style={{fontSize: "0.6rem"}}>Google Rating</div>
               </div>
-              <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-4 text-center">
-                <div className="text-2xl font-bold text-white">500+</div>
-                <div className="text-[10px] text-white/70 mt-1 leading-tight">Roofs Installed</div>
+              <div className="hero-stat-card" style={{padding: "0.9rem"}}>
+                <div className="stat-value" style={{fontSize: "1.4rem"}}>500+</div>
+                <div className="stat-label" style={{fontSize: "0.6rem"}}>Roofs Installed</div>
               </div>
-              <div className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 p-4 text-center">
-                <div className="text-2xl font-bold text-white">1–3</div>
-                <div className="text-[10px] text-white/70 mt-1 leading-tight">Day Turnaround</div>
+              <div className="hero-stat-card" style={{padding: "0.9rem"}}>
+                <div className="stat-value" style={{fontSize: "1.4rem"}}>1–3</div>
+                <div className="stat-label" style={{fontSize: "0.6rem"}}>Day Turnaround</div>
               </div>
             </div>
           </div>
@@ -544,7 +566,7 @@ export default function LandingPage() {
       </section>
 
       {/* Trust Section */}
-      <section className="section-padding bg-[#0F4A9C]" data-testid="trust-section">
+      <section className="section-padding bg-[#043061]" data-testid="trust-section">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white">
@@ -637,16 +659,18 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-[#0F4A9C] py-8 px-4">
+      <footer className="bg-[#043061] py-10 px-4">
         <div className="max-w-6xl mx-auto text-center">
-          <div className="brand-wordmark brand-on-dark justify-center mb-3" style={{display: "inline-flex"}}>
-            <span className="brand-icon">RM</span>
-            <span>
-              <span className="brand-name">Roofing Monkeys</span>
-              <span className="brand-sub">Greater Toronto Area</span>
-            </span>
+          <div className="flex justify-center mb-4">
+            <a href="/" className="brand-logo-img on-dark" aria-label="Roofing Monkeys">
+              <img src={LOGO_HERO_URL} alt="Roofing Monkeys logo" />
+              <span className="brand-text">
+                <span className="name">Roofing Monkeys</span>
+                <span className="sub">Greater Toronto Area</span>
+              </span>
+            </a>
           </div>
-          <p className="text-white/70 mb-4">Roofing Toronto | Mississauga | Vaughan | Brampton | Markham &amp; the rest of the GTA</p>
+          <p className="text-white/70 mb-4">Roofing Toronto · Mississauga · Vaughan · Brampton · Markham &amp; the rest of the GTA</p>
           <a href={PHONE_HREF} className="text-[#59C8EE] font-semibold text-lg hover:underline" data-testid="footer-phone">{PHONE_NUMBER}</a>
           <p className="text-white/50 text-sm mt-6">© {new Date().getFullYear()} Roofing Monkeys. All rights reserved.</p>
         </div>
@@ -658,7 +682,7 @@ export default function LandingPage() {
           <Button
             onClick={handleCallClick}
             data-testid="mobile-call-button"
-            className="flex-1 h-12 bg-[#0F4A9C] hover:bg-[#0A3A7D] text-white font-semibold rounded-full flex items-center justify-center gap-2"
+            className="flex-1 h-12 bg-[#043061] hover:bg-[#021f40] text-white font-semibold rounded-full flex items-center justify-center gap-2"
           >
             <Phone className="w-5 h-5" />
             Call Now

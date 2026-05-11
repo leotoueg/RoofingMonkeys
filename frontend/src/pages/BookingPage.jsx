@@ -167,7 +167,7 @@ export default function BookingPage() {
   return (
     <div className="min-h-screen bg-[#F9F8FD]" data-testid="booking-page">
       {/* Header */}
-      <header className="bg-[#0F4A9C] py-4 px-4">
+      <header className="bg-[#043061] py-4 px-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <button
             onClick={() => navigate("/")}
@@ -312,7 +312,7 @@ export default function BookingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#0F4A9C] py-6 px-4 mt-12">
+      <footer className="bg-[#043061] py-6 px-4 mt-12">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-white/70 text-sm">© {new Date().getFullYear()} Roofing Monkeys. All rights reserved.</p>
         </div>
