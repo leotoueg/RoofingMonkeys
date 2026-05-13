@@ -394,11 +394,46 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Project Showcase Section — auto-scrolling horizontal gallery (moved above Services) */}
+      <section className="section-padding bg-[#F9F8FD]" data-testid="showcase-section">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12 px-4">
+            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Our Work</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#043061] mt-4 mb-4">
+              What we do
+            </h2>
+            <p className="text-lg text-[#475569]">
+              High-quality craftsmanship from real projects across the Greater Toronto Area.
+            </p>
+          </div>
+
+          <div className="marquee" data-testid="project-marquee" aria-label="Recent roofing projects, auto-scrolling gallery">
+            <div className="marquee-track">
+              {[...projectImages, ...projectImages].map((img, i) => (
+                <figure
+                  key={i}
+                  className="marquee-card"
+                  data-testid={i < projectImages.length ? `project-image-${i}` : undefined}
+                  aria-hidden={i >= projectImages.length ? "true" : undefined}
+                >
+                  <img src={img.url} alt={img.alt} loading="lazy" />
+                  <figcaption className="marquee-caption">{img.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-center text-[#475569] mt-8 px-4">
+            Every roof is built to handle Toronto's snow, ice and summer storms.
+          </p>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section className="section-padding bg-white" data-testid="services-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">What We Do</span>
+            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Our Services</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mt-4 mb-4">
               Roofing Services Across the GTA
             </h2>
@@ -519,43 +554,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Project Showcase Section — auto-scrolling horizontal gallery */}
-      <section className="section-padding bg-[#F9F8FD]" data-testid="showcase-section">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 px-4">
-            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Our Work</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-[#043061] mt-4 mb-4">
-              Recent Roofing Projects
-            </h2>
-            <p className="text-lg text-[#475569]">
-              High-quality craftsmanship from real projects across the Greater Toronto Area.
-            </p>
-          </div>
-
-          <div className="marquee" data-testid="project-marquee" aria-label="Recent roofing projects, auto-scrolling gallery">
-            <div className="marquee-track">
-              {[...projectImages, ...projectImages].map((img, i) => (
-                <figure
-                  key={i}
-                  className="marquee-card"
-                  data-testid={i < projectImages.length ? `project-image-${i}` : undefined}
-                  aria-hidden={i >= projectImages.length ? "true" : undefined}
-                >
-                  <img src={img.url} alt={img.alt} loading="lazy" />
-                  <figcaption className="marquee-caption">{img.caption}</figcaption>
-                </figure>
-              ))}
-            </div>
-          </div>
-
-          <p className="text-center text-[#475569] mt-8 px-4">
-            Every roof is built to handle Toronto's snow, ice and summer storms.
-          </p>
-        </div>
-      </section>
-
       {/* Process Section */}
-      <section className="section-padding bg-white" data-testid="process-section">
+      <section className="section-padding bg-[#F9F8FD]" data-testid="process-section">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Simple Process</span>
