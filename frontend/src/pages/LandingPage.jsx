@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Phone, CheckCircle, Star, Shield, Award, MapPin, Clock, ChevronDown, ChevronUp, Users, Wrench, Calendar, Home, Hammer, CloudRain } from "lucide-react";
 import { Input } from "../components/ui/input";
@@ -6,6 +6,7 @@ import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
+import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId } from "../lib/tracking";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
@@ -16,11 +17,9 @@ const FORM_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxo
 const LOGO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4qmsoeue_RMLogo.jpg";
 const LOGO_HERO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/i95qpl6g_rmlogohero.png";
 
-// GTM DataLayer helper
-const pushToDataLayer = (event, data = {}) => {
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({ event, ...data });
-};
+// GTM helper (delegates to shared tracking module so every event carries
+// the first-touch gclid / utm context automatically)
+const pushToDataLayer = (event, data = {}) => pushDataLayerEvent(event, data);
 
 // Real Roofing Monkeys project photos
 const projectImages = [
@@ -64,6 +63,12 @@ export default function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
+  // First-touch attribution + page_view (runs once on mount)
+  useEffect(() => {
+    initTracking();
+    pushToDataLayer("page_view", { page: "landing", page_path: "/" });
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -83,6 +88,9 @@ export default function LandingPage() {
 
     setIsSubmitting(true);
 
+    const eventId = newEventId();
+    const tracking = getTrackingContext();
+
     try {
       // Send to webhook (only if configured — otherwise skip cleanly)
       if (FORM_WEBHOOK_URL) {
@@ -97,7 +105,10 @@ export default function LandingPage() {
             projectType: formData.projectType,
             source: "roofing-monkeys-landing-page",
             formType: "lead_capture",
+            event_id: eventId,
             timestamp: new Date().toISOString(),
+            page_url: typeof window !== "undefined" ? window.location.href : "",
+            ...tracking,
           }),
         });
       }
@@ -109,12 +120,14 @@ export default function LandingPage() {
         form_name: "lead_capture",
         project_type: formData.projectType,
         page: "landing",
+        event_id: eventId,
       });
       pushToDataLayer("generate_lead", {
         currency: "CAD",
         value: 0,
         form_name: "lead_capture",
         project_type: formData.projectType,
+        event_id: eventId,
       });
 
       // Store form data in sessionStorage for booking page
@@ -135,12 +148,14 @@ export default function LandingPage() {
         form_name: "lead_capture",
         project_type: formData.projectType,
         page: "landing",
+        event_id: eventId,
       });
       pushToDataLayer("generate_lead", {
         currency: "CAD",
         value: 0,
         form_name: "lead_capture",
         project_type: formData.projectType,
+        event_id: eventId,
       });
       toast.success("Thank you! Redirecting to book your consultation...");
       setTimeout(() => {

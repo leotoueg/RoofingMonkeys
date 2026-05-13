@@ -3,17 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
+import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId } from "../lib/tracking";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
 // Appointment booking webhook (LeadConnector)
 const BOOKING_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxovpPbrakSW/webhook-trigger/8ceeffea-ae53-4aea-aa15-324089d9b91c";
 
-// GTM DataLayer helper
-const pushToDataLayer = (event, data = {}) => {
-  window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push({ event, ...data });
-};
+// GTM helper (delegates to shared tracking module)
+const pushToDataLayer = (event, data = {}) => pushDataLayerEvent(event, data);
 
 // Available time slots — 9 AM to 6 PM, hourly
 const TIME_SLOTS = [
@@ -94,6 +92,9 @@ export default function BookingPage() {
 
     setIsBooking(true);
 
+    const eventId = newEventId();
+    const tracking = getTrackingContext();
+
     try {
       if (BOOKING_WEBHOOK_URL) {
         await fetch(BOOKING_WEBHOOK_URL, {
@@ -109,7 +110,10 @@ export default function BookingPage() {
             appointmentTime: selectedTime,
             source: "roofing-monkeys-landing-page",
             formType: "booking",
+            event_id: eventId,
             timestamp: new Date().toISOString(),
+            page_url: typeof window !== "undefined" ? window.location.href : "",
+            ...tracking,
           }),
         });
       }
@@ -121,6 +125,7 @@ export default function BookingPage() {
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
         page: "booking",
+        event_id: eventId,
       });
       pushToDataLayer("schedule", {
         currency: "CAD",
@@ -128,6 +133,7 @@ export default function BookingPage() {
         appointment_date: selectedDay.fullDate,
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
+        event_id: eventId,
       });
 
       setIsBooked(true);
@@ -143,6 +149,7 @@ export default function BookingPage() {
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
         page: "booking",
+        event_id: eventId,
       });
       pushToDataLayer("schedule", {
         currency: "CAD",
@@ -150,6 +157,7 @@ export default function BookingPage() {
         appointment_date: selectedDay.fullDate,
         appointment_time: selectedTime,
         project_type: leadData?.projectType || "unknown",
+        event_id: eventId,
       });
       setIsBooked(true);
       toast.success("Appointment requested!");

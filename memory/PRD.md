@@ -45,7 +45,12 @@ Rebrand the high-converting Google Ads landing page (cloned from `leotoueg/Apex-
 - 5 FAQ items rewritten for roofing context.
 - Hero swapped Wistia video → 3 stat cards in solid `#043061` blocks (4.9★ Google / 500+ Roofs / 1–3 Day Turnaround).
 - Social-proof chip added above the lead form (★★★★★ 4.9 on Google · 500+ GTA Roofs · Licensed & Insured) — sits in `#043061` block.
-- Project gallery converted to an **auto-scrolling horizontal marquee** (45s linear loop, pause-on-hover, edge fade mask, accessible with `prefers-reduced-motion` fallback) — now holds **5 real Roofing Monkeys photos** (shingles.jpg, flatroof.jpg, plus 3 new photos from Google Drive: full residential replacement, IKO Cambridge install crew, full tear-off with deck prep). Photos resized to 1600px / ~300 KB each and self-hosted at `/projects/`.
+- **Frontend-only tracking pipeline** wired up (`/app/frontend/src/lib/tracking.js`):
+  - Captures `gclid`, `gbraid`, `wbraid`, `fbclid`, `msclkid` + all 5 `utm_*` params on landing, persists first-touch values to sessionStorage so internal navigation doesn't reset attribution.
+  - Every dataLayer push automatically merges the tracking context — no manual wiring needed.
+  - Every webhook payload (form + booking) now includes gclid/utm/landing_url/referrer plus `event_id` (UUID) for dedup, `timestamp`, and `page_url`.
+  - `page_view` events fire on `/` and `/booking` mount.
+- Backend `/api/lead` and `/api/booking` endpoints still exist as a fallback option but the frontend never calls them — everything (webhooks + GTM dataLayer) runs purely from the browser.
 - `+1 (647) 954-1671` phone wired into header, footer, all CTAs, sticky mobile bar, and `tel:` href.
 - Hero offer badge: "$1,500 OFF Your New Roof — Limited Time".
 - Booking page: month-boundary day-selection bug fix (uses index instead of dayNumber).
