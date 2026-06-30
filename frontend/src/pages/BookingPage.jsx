@@ -8,7 +8,7 @@ import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTr
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
 // Appointment booking webhook (LeadConnector)
-const BOOKING_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxovpPbrakSW/webhook-trigger/8ceeffea-ae53-4aea-aa15-324089d9b91c";
+const BOOKING_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/ejeOEWkR6MEM49HF2Eqp/webhook-trigger/7f134bf8-ccf6-49b1-a059-9706ac07a796";
 
 // GTM helper (delegates to shared tracking module)
 const pushToDataLayer = (event, data = {}) => pushDataLayerEvent(event, data);
