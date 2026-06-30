@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
-import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId } from "../lib/tracking";
+import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
@@ -135,6 +135,18 @@ export default function BookingPage() {
         project_type: leadData?.projectType || "unknown",
         event_id: eventId,
       });
+
+      // Meta Pixel — standard "Schedule" event (fires on appointment request)
+      fbqTrack(
+        "Schedule",
+        {
+          content_name: "appointment_request",
+          content_category: leadData?.projectType || "unknown",
+          currency: "CAD",
+          value: 0,
+        },
+        eventId
+      );
 
       setIsBooked(true);
       toast.success("Appointment requested!");

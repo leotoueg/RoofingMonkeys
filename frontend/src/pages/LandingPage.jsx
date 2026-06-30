@@ -6,7 +6,7 @@ import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
-import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId } from "../lib/tracking";
+import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
@@ -129,6 +129,18 @@ export default function LandingPage() {
         project_type: formData.projectType,
         event_id: eventId,
       });
+
+      // Meta Pixel — standard "Lead" event (fires on lead form submit)
+      fbqTrack(
+        "Lead",
+        {
+          content_name: "lead_capture_form",
+          content_category: formData.projectType,
+          currency: "CAD",
+          value: 0,
+        },
+        eventId
+      );
 
       // Store form data in sessionStorage for booking page
       sessionStorage.setItem("leadData", JSON.stringify(formData));

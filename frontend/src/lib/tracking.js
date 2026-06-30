@@ -93,3 +93,20 @@ export function pushDataLayerEvent(event, data = {}) {
     ...data,
   });
 }
+
+// Fire a Meta Pixel event safely. Falls back to a no-op if fbq isn't loaded
+// (e.g. ad blocker), so callers never need to null-check.
+// `eventID` is passed so server-side Conversions API events from
+// LeadConnector can dedupe against the browser-side pixel hit.
+export function fbqTrack(eventName, params = {}, eventID) {
+  if (typeof window === "undefined" || typeof window.fbq !== "function") return;
+  try {
+    if (eventID) {
+      window.fbq("track", eventName, params, { eventID });
+    } else {
+      window.fbq("track", eventName, params);
+    }
+  } catch (e) {
+    /* never block UX on a tracking failure */
+  }
+}
