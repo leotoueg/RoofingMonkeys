@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# Roofing Monkeys — Landing Page
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Static React SPA (Create React App). Fully self-contained: all tracking, form
+submissions and appointment bookings happen client-side, posting directly to
+LeadConnector webhooks. No backend required.
 
-## Available Scripts
+## Deploy to Vercel
 
-In the project directory, you can run:
+1. Push this `/frontend` folder as the repo root (or set the "Root Directory"
+   in Vercel to `frontend/`).
+2. Vercel will auto-detect **Create React App**. The included `vercel.json`
+   configures:
+   - `yarn install --frozen-lockfile` + `yarn build`
+   - Output directory: `build/`
+   - SPA rewrites so `/booking` and deep links don't 404 on refresh
+   - Long cache headers for `/static/*` and image folders
+3. **No environment variables needed.** All third-party IDs are inlined:
+   - GTM container: `GTM-PKD4WCJV`
+   - Meta Pixel: `1310983044526111`
+   - Microsoft Clarity: `w0bf7lchr8`
+   - PostHog: `phc_xAvL2Iq4tFmANRE7kzbKwaSqp1HJjN7x48s3vr0CMjs`
+   - LeadConnector webhooks: constants in `src/pages/LandingPage.jsx` and
+     `src/pages/BookingPage.jsx`.
 
-### `npm start`
+## Local dev
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+yarn install
+yarn start   # http://localhost:3000
+yarn build   # production build in ./build
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Where things live
 
-### `npm test`
+- `src/pages/LandingPage.jsx` — hero, lead form, gallery, services, testimonials, process, trust, FAQ.
+- `src/pages/BookingPage.jsx` — Mon–Sat calendar (up to 7 days out), hourly slots 9 AM–6 PM.
+- `src/lib/tracking.js` — first-touch gclid/UTM capture, dataLayer helper, Meta Pixel wrapper.
+- `public/brand/` — company logo assets.
+- `public/photos/`, `public/projects/` — project gallery photos.
+- `public/index.html` — GTM, Meta Pixel, Microsoft Clarity and PostHog snippets.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Attribution & analytics forwarded automatically
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Every webhook payload and every GTM/Meta Pixel event carries:
+`gclid`, `gbraid`, `wbraid`, `fbclid`, `msclkid`, `utm_source`, `utm_medium`,
+`utm_campaign`, `utm_term`, `utm_content`, `landing_url`, `referrer`,
+`event_id` (UUID for dedup with server-side conversions).

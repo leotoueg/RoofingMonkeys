@@ -13,20 +13,20 @@ const PHONE_HREF = "tel:+16479541671";
 // Form submission webhook (LeadConnector)
 const FORM_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxovpPbrakSW/webhook-trigger/a98af371-4fca-4209-ba78-63c1ed1d8862";
 
-// Brand assets
-const LOGO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4qmsoeue_RMLogo.jpg";
-const LOGO_HERO_URL = "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/i95qpl6g_rmlogohero.png";
+// Brand assets (self-hosted in /public — no external CDN dependency)
+const LOGO_URL = "/brand/logo.jpg";
+const LOGO_HERO_URL = "/brand/logo-dark.png";
 
 // GTM helper (delegates to shared tracking module so every event carries
 // the first-touch gclid / utm context automatically)
 const pushToDataLayer = (event, data = {}) => pushDataLayerEvent(event, data);
 
-// Real Roofing Monkeys project photos
+// Real Roofing Monkeys project photos (all self-hosted for deploy portability)
 const projectImages = [
-  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/aane7i05_shingles.jpg", alt: "Roofing Monkeys crew installing shingles", caption: "Shingle installation — Toronto" },
+  { url: "/photos/shingles.jpg", alt: "Roofing Monkeys crew installing shingles", caption: "Shingle installation — Toronto" },
   { url: "/projects/rm-project-2.jpg", alt: "Crew installing IKO Cambridge architectural shingles in the GTA", caption: "IKO Cambridge shingles — GTA" },
   { url: "/projects/rm-project-3.jpg", alt: "Roofer performing shingle tear-off on a wooden roof deck", caption: "Full tear-off & deck prep" },
-  { url: "https://customer-assets.emergentagent.com/job_roofing-gta/artifacts/4aa04gmd_flatroof.jpg", alt: "Flat roof installation by Roofing Monkeys", caption: "Flat roof replacement" },
+  { url: "/photos/flatroof.jpg", alt: "Flat roof installation by Roofing Monkeys", caption: "Flat roof replacement" },
   { url: "/projects/rm-project-1.jpg", alt: "Roof replacement job site with Roofing Monkeys dumpster", caption: "Full residential replacement" },
 ];
 
