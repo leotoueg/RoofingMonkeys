@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin, CalendarCheck, Search, FileCheck } from "lucide-react";
+import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin, CalendarCheck, Search, FileCheck, ChevronRight } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
@@ -241,62 +241,57 @@ export default function BookingPage() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8 md:py-12">
+      <main className="max-w-4xl mx-auto px-4 py-6 md:py-10">
         {/* Page Title */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 bg-[#1D67CD]/10 text-[#1D67CD] px-4 py-2 rounded-full text-sm font-semibold mb-4">
-            <CheckCircle className="w-4 h-4" />
+        <div className="text-center mb-5 md:mb-7">
+          <div className="inline-flex items-center gap-2 bg-[#1D67CD]/10 text-[#1D67CD] px-3 py-1 rounded-full text-xs md:text-sm font-semibold mb-3">
+            <CheckCircle className="w-3.5 h-3.5 md:w-4 md:h-4" />
             <span>Information Received!</span>
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mb-4">
-            You're Almost Done — Book Your Free Inspection
+          <h1 className="text-xl md:text-3xl font-bold text-[#043061] mb-1 md:mb-2">
+            Book Your Free Inspection
           </h1>
-          <p className="text-lg text-[#475569]">
-            Choose a time that works best for you below.
+          <p className="text-sm md:text-base text-[#475569]">
+            Pick a time that works for you.
           </p>
         </div>
 
         {/* Lead Summary */}
         {leadData && (
-          <div className="bg-white rounded-xl p-4 mb-8 border border-slate-200">
-            <p className="text-sm text-[#94A3B8] mb-1">Booking inspection for:</p>
-            <p className="font-semibold text-[#0F172A]">{leadData.name} • {leadData.phone}</p>
+          <div className="bg-white rounded-xl px-3 py-2 md:p-4 mb-4 border border-slate-200 text-center md:text-left">
+            <p className="text-xs text-[#94A3B8] mb-0.5">Booking inspection for:</p>
+            <p className="text-sm md:text-base font-semibold text-[#0F172A]">{leadData.name} • {leadData.phone}</p>
           </div>
         )}
 
-        {/* Urgency Message */}
-        <div className="bg-[#1D67CD]/5 border border-[#1D67CD]/20 rounded-xl p-4 mb-8">
-          <div className="flex items-start gap-3">
-            <Clock className="w-5 h-5 text-[#1D67CD] flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold text-[#0F172A]">Appointments fill quickly across the GTA</p>
-              <p className="text-sm text-[#475569]">Secure your spot now. Homeowners who book an inspection are prioritized for current promotions.</p>
-            </div>
+        {/* 3-step horizontal process flow */}
+        <div className="mb-6 md:mb-8" data-testid="process-infographic">
+          <div className="text-center mb-3 md:mb-5">
+            <span className="text-[10px] md:text-xs uppercase tracking-widest text-[#1D67CD] font-semibold">How It Works</span>
           </div>
-        </div>
-
-        {/* 3-step process infographic */}
-        <div className="mb-10" data-testid="process-infographic">
-          <div className="text-center mb-6">
-            <span className="text-xs md:text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">How It Works</span>
-            <h2 className="text-xl md:text-2xl font-bold text-[#043061] mt-2">Three Simple Steps</h2>
-          </div>
-
-          <div className="process-steps">
+          <div className="process-flow">
             {[
-              { n: 1, Icon: CalendarCheck, title: "Schedule an Inspection", body: "Pick a day and time that works for you below." },
-              { n: 2, Icon: Search,        title: "Our Team Inspects Your Roof", body: "A Roofing Monkeys crew comes on-site and inspects your roof." },
-              { n: 3, Icon: FileCheck,     title: "Same-Day Quote", body: "You get a clear, written, no-obligation quote the same day." },
-            ].map((s, i) => (
-              <div className="process-step-card" data-testid={`process-step-${i}`} key={s.n}>
-                <span className="process-step-num" aria-hidden="true">{String(s.n).padStart(2, "0")}</span>
-                <div className="process-step-icon">
-                  <s.Icon className="w-6 h-6" />
+              { n: 1, Icon: CalendarCheck, title: "Schedule",   body: "Pick a day and time below." },
+              { n: 2, Icon: Search,        title: "We Inspect", body: "Our crew inspects your roof on-site." },
+              { n: 3, Icon: FileCheck,     title: "Same-Day Quote", body: "Written no-obligation quote the same day." },
+            ].map((s, i, arr) => (
+              <React.Fragment key={s.n}>
+                <div className="process-step-item" data-testid={`process-step-${i}`}>
+                  <div className="process-badge">
+                    <span className="step-num">{s.n}</span>
+                    <s.Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7" strokeWidth={2} />
+                  </div>
+                  <h3>{s.title}</h3>
+                  <p>{s.body}</p>
                 </div>
-                <h3 className="process-step-title">{s.title}</h3>
-                <p className="process-step-body">{s.body}</p>
-                {i < 2 && <span className="process-arrow" aria-hidden="true">→</span>}
-              </div>
+                {i < arr.length - 1 && (
+                  <ChevronRight
+                    className="process-arrow w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
