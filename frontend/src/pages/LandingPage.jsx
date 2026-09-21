@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
+import { GENERAL_VARIANT, ALL_SERVICES } from "../lib/serviceVariants";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
@@ -16,6 +17,9 @@ const FORM_WEBHOOK_URL = "https://services.leadconnectorhq.com/hooks/wNdMd0x1lxo
 // Brand assets (self-hosted in /public — no external CDN dependency)
 const LOGO_URL = "/brand/logo.jpg";
 const LOGO_HERO_URL = "/brand/logo-dark.png";
+
+// Map string icon names in ALL_SERVICES to lucide components
+const ICON_MAP = { Home, Wrench, Hammer, Shield, CloudRain };
 
 // GTM helper (delegates to shared tracking module so every event carries
 // the first-touch gclid / utm context automatically)
@@ -42,32 +46,49 @@ const testimonials = [
   { name: "Priya S.", location: "Google Review", text: "Got quotes from three GTA roofers. Roofing Monkeys weren't the cheapest, but they were the most thorough — explained the deck condition, ventilation, ice & water shield. The finished metal roof looks incredible and the warranty is solid.", rating: 5 },
 ];
 
-// FAQ items
-const faqItems = [
-  { question: "How long does a new roof installation take?", answer: "Most residential roof replacements in the Greater Toronto Area are completed in 1–3 days, depending on the size of the home, roof complexity and weather. Flat roof and metal roof projects may take a little longer. We give you a clear timeline before we start." },
-  { question: "Do you offer financing options?", answer: "Yes — we offer flexible financing options so you don't have to pay everything up front. During your free in-home estimate we'll walk you through the available plans and find a monthly payment that fits your budget." },
-  { question: "What does a new roof cost in the GTA?", answer: "Roof costs in Toronto and the surrounding GTA depend on roof size, slope, materials (asphalt shingles, metal, flat membrane) and how much underlying repair is needed. We provide free, no-obligation, written estimates — and you get $1,500 OFF your new roof when you book a consultation through this page." },
-  { question: "Do you handle emergency roof repairs?", answer: "Yes. Storm damage, leaks and missing shingles can't wait. Roofing Monkeys offers same-day and next-day emergency roof repair across the Greater Toronto Area. Call us directly for the fastest response." },
-  { question: "Are you licensed and insured?", answer: "Absolutely. Roofing Monkeys is a fully licensed and insured GTA roofing contractor with WSIB coverage. Every job is backed by a workmanship warranty in addition to the manufacturer's material warranty." },
-];
+// FAQ items are now supplied by the variant (see /lib/serviceVariants.js).
 
-export default function LandingPage() {
+export default function LandingPage({ variant = GENERAL_VARIANT }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     email: "",
     address: "",
-    projectType: "",
+    projectType: variant.serviceKey || "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
 
-  // First-touch attribution + page_view (runs once on mount)
+  // First-touch attribution + page_view + dynamic <title>/<meta description>
   useEffect(() => {
     initTracking();
-    pushToDataLayer("page_view", { page: "landing", page_path: "/" });
-  }, []);
+    pushToDataLayer("page_view", {
+      page: "landing",
+      page_path: variant.slug || "/",
+      service_variant: variant.serviceKey || "general",
+    });
+
+    if (variant.pageTitle) document.title = variant.pageTitle;
+    if (variant.metaDescription) {
+      let el = document.querySelector('meta[name="description"]');
+      if (!el) {
+        el = document.createElement("meta");
+        el.setAttribute("name", "description");
+        document.head.appendChild(el);
+      }
+      el.setAttribute("content", variant.metaDescription);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [variant.slug]);
+
+  // Reorder ALL_SERVICES so the variant's primary service leads.
+  const orderedServices = (() => {
+    if (!variant.primaryServiceKey) return ALL_SERVICES.filter((s) => s.key !== "soffit").slice(0, 5);
+    const primary = ALL_SERVICES.find((s) => s.key === variant.primaryServiceKey);
+    const rest = ALL_SERVICES.filter((s) => s.key !== variant.primaryServiceKey).slice(0, 4);
+    return primary ? [primary, ...rest] : ALL_SERVICES.slice(0, 5);
+  })();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -230,23 +251,34 @@ export default function LandingPage() {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Column - Content */}
             <div className="text-white animate-fade-in-up">
-              <div className="offer-badge mb-6">$1,500 OFF Your New Roof — Limited Time</div>
+              <div className="offer-badge mb-6">{variant.heroBadge}</div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
-                Trusted Roofing in the Greater Toronto Area — Done Right, Done Fast
+                {variant.heroH1}
               </h1>
 
-              <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed">
-                Shingles, flat roofs, metal roofs, repairs and 24/7 emergency service from a fully licensed and insured GTA roofing crew you can actually trust.
+              <p className="text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
+                {variant.heroSubtitle}
               </p>
 
+              {/* Hero video (autoplay, muted, loop, playsinline) */}
+              <div className="hero-video-wrap mb-8" data-testid="hero-video">
+                <video
+                  className="hero-video"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  poster="/videos/hero-poster.jpg"
+                  aria-label="Roofing Monkeys crew at work"
+                >
+                  <source src="/videos/hero.mp4" type="video/mp4" />
+                </video>
+              </div>
+
               <ul className="space-y-4 mb-8">
-                {[
-                  "Asphalt Shingles, Metal & Flat Roof Specialists",
-                  "Free On-Site Estimate — No Pressure, No Obligation",
-                  "Most Roofs Completed in 1–3 Days",
-                  "Workmanship Warranty + Manufacturer Warranty",
-                ].map((item, i) => (
+                {variant.heroBullets.map((item, i) => (
                   <li key={i} className="flex items-center gap-3 text-white/95">
                     <CheckCircle className="w-5 h-5 text-[#59C8EE] flex-shrink-0" />
                     <span>{item}</span>
@@ -378,6 +410,7 @@ export default function LandingPage() {
                         <SelectItem value="roof-repair">Roof Repair</SelectItem>
                         <SelectItem value="flat-roof">Flat Roof</SelectItem>
                         <SelectItem value="metal-roof">Metal Roof</SelectItem>
+                        <SelectItem value="soffit">Soffit, Fascia &amp; Gutters</SelectItem>
                         <SelectItem value="emergency">Emergency Repair</SelectItem>
                       </SelectContent>
                     </Select>
@@ -460,35 +493,39 @@ export default function LandingPage() {
       <section className="section-padding bg-white" data-testid="services-section">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Our Services</span>
+            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">{variant.servicesEyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mt-4 mb-4">
-              Roofing Services Across the GTA
+              {variant.servicesH2}
             </h2>
             <p className="text-lg text-[#475569] max-w-2xl mx-auto">
-              From a single missing shingle to a full strip-and-replace, our crews handle every kind of Toronto roof.
+              {variant.servicesSubtitle}
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {[
-              { icon: Home, title: "Shingles", text: "Architectural & 3-tab asphalt shingles installed to manufacturer spec." },
-              { icon: Wrench, title: "Roof Repair", text: "Leaks, missing shingles, flashing, valleys — fixed properly the first time." },
-              { icon: Hammer, title: "Flat Roofs", text: "Modified bitumen and TPO membrane systems for low-slope roofs." },
-              { icon: Shield, title: "Metal Roofs", text: "Standing seam and metal panel roofs built to last 40+ years." },
-              { icon: CloudRain, title: "Emergency Repairs", text: "Storm damage and active leaks — same-day GTA response." },
-            ].map((s, i) => (
-              <div
-                key={i}
-                className="p-6 rounded-2xl bg-[#F9F8FD] border border-[#E2E8F0] hover:border-[#59C8EE] hover:shadow-lg transition-all duration-200"
-                data-testid={`service-card-${i}`}
-              >
-                <div className="w-12 h-12 rounded-xl bg-[#1D67CD] flex items-center justify-center mb-4">
-                  <s.icon className="w-6 h-6 text-white" />
+            {orderedServices.map((s, i) => {
+              const Icon = ICON_MAP[s.icon] || Home;
+              const isPrimary = i === 0 && variant.primaryServiceKey;
+              return (
+                <div
+                  key={s.key}
+                  className={`p-6 rounded-2xl border transition-all duration-200 ${
+                    isPrimary
+                      ? "bg-[#043061] border-[#59C8EE] shadow-lg ring-1 ring-[#59C8EE]/30"
+                      : "bg-[#F9F8FD] border-[#E2E8F0] hover:border-[#59C8EE] hover:shadow-lg"
+                  }`}
+                  data-testid={`service-card-${i}`}
+                >
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
+                    isPrimary ? "bg-[#59C8EE]" : "bg-[#1D67CD]"
+                  }`}>
+                    <Icon className={`w-6 h-6 ${isPrimary ? "text-[#043061]" : "text-white"}`} />
+                  </div>
+                  <h3 className={`text-lg font-bold mb-2 ${isPrimary ? "text-white" : "text-[#0F4A9C]"}`}>{s.title}</h3>
+                  <p className={`text-sm leading-relaxed ${isPrimary ? "text-white/85" : "text-[#475569]"}`}>{s.text}</p>
                 </div>
-                <h3 className="text-lg font-bold text-[#0F4A9C] mb-2">{s.title}</h3>
-                <p className="text-[#475569] text-sm leading-relaxed">{s.text}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -496,12 +533,12 @@ export default function LandingPage() {
       {/* Offer Section */}
       <section className="section-padding bg-[#F9F8FD]" data-testid="offer-section">
         <div className="max-w-4xl mx-auto text-center">
-          <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Limited Time Offer</span>
+          <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">{variant.offerEyebrow}</span>
           <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mt-4 mb-4">
-            Get $1,500 Off Your New Roof
+            {variant.offerH2}
           </h2>
           <p className="text-lg text-[#475569] mb-6">
-            Available for GTA homeowners who book a free consultation this month. Cannot be combined with other offers.
+            {variant.offerBody}
           </p>
           <div className="flex items-center justify-center gap-2 text-[#0F172A] mb-8">
             <Clock className="w-5 h-5 text-[#1D67CD]" />
@@ -512,7 +549,7 @@ export default function LandingPage() {
             data-testid="check-availability-button"
             className="btn-cta text-lg px-8"
           >
-            Check Availability
+            {variant.offerCta}
           </Button>
         </div>
       </section>
@@ -587,7 +624,7 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Simple Process</span>
             <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mt-4">
-              How Your Roofing Project Works
+              {variant.processH2}
             </h2>
           </div>
 
@@ -651,7 +688,7 @@ export default function LandingPage() {
           </div>
 
           <div className="space-y-4">
-            {faqItems.map((faq, i) => (
+            {variant.faqItems.map((faq, i) => (
               <div key={i} className="faq-item pb-4" data-testid={`faq-item-${i}`}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
@@ -680,10 +717,10 @@ export default function LandingPage() {
       <section className="section-padding bg-[#F9F8FD]" data-testid="final-cta-section">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mb-4">
-            Ready to Upgrade Your Roof?
+            {variant.finalCtaH2}
           </h2>
           <p className="text-lg text-[#475569] mb-8">
-            Book your free consultation now and lock in your $1,500 savings.
+            {variant.finalCtaBody}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
