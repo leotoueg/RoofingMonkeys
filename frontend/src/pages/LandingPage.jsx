@@ -166,7 +166,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
       // Store form data in sessionStorage for booking page
       sessionStorage.setItem("leadData", JSON.stringify(formData));
 
-      toast.success("Thank you! Redirecting to book your consultation...");
+      toast.success("Thank you! Redirecting to book your inspection...");
 
       setTimeout(() => {
         navigate("/booking");
@@ -190,7 +190,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
         project_type: formData.projectType,
         event_id: eventId,
       });
-      toast.success("Thank you! Redirecting to book your consultation...");
+      toast.success("Thank you! Redirecting to book your inspection...");
       setTimeout(() => {
         navigate("/booking");
       }, 1000);
@@ -251,18 +251,18 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Left Column - Content */}
             <div className="text-white animate-fade-in-up">
-              <div className="offer-badge mb-6">{variant.heroBadge}</div>
+              <div className="offer-badge mb-4">{variant.heroBadge}</div>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-6">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight mb-4">
                 {variant.heroH1}
               </h1>
 
-              <p className="text-lg md:text-xl text-white/90 mb-6 leading-relaxed">
+              <p className="text-base md:text-lg text-white/90 mb-4 leading-relaxed">
                 {variant.heroSubtitle}
               </p>
 
               {/* Hero video (autoplay, muted, loop, playsinline) */}
-              <div className="hero-video-wrap mb-8" data-testid="hero-video">
+              <div className="hero-video-wrap mb-5" data-testid="hero-video">
                 <video
                   className="hero-video"
                   autoPlay
@@ -277,24 +277,24 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                 </video>
               </div>
 
-              <ul className="space-y-4 mb-8">
+              <ul className="space-y-2 mb-5">
                 {variant.heroBullets.map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-white/95">
+                  <li key={i} className="flex items-center gap-3 text-sm md:text-base text-white/95">
                     <CheckCircle className="w-5 h-5 text-[#59C8EE] flex-shrink-0" />
                     <span>{item}</span>
                   </li>
                 ))}
               </ul>
 
-              <div className="flex flex-wrap gap-3 mb-8">
-                <div className="trust-badge">
-                  <Shield className="w-4 h-4" /> Licensed &amp; Insured
+              <div className="flex flex-wrap gap-2 mb-6">
+                <div className="trust-badge text-xs">
+                  <Shield className="w-3.5 h-3.5" /> Licensed &amp; Insured
                 </div>
-                <div className="trust-badge">
-                  <MapPin className="w-4 h-4" /> Greater Toronto Area
+                <div className="trust-badge text-xs">
+                  <MapPin className="w-3.5 h-3.5" /> Greater Toronto Area
                 </div>
-                <div className="trust-badge">
-                  <Star className="w-4 h-4" /> 4.9★ Google Rated
+                <div className="trust-badge text-xs">
+                  <Star className="w-3.5 h-3.5" /> 4.9★ Google Rated
                 </div>
               </div>
 
@@ -336,10 +336,10 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                 </div>
               </div>
 
-              <div className="form-card p-6 md:p-8">
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-[#043061] mb-2">Get Your Free Roof Estimate</h3>
-                  <p className="text-[#475569]">{variant.formTagline}</p>
+              <div className="form-card p-5 md:p-6">
+                <div className="text-center mb-4">
+                  <h3 className="text-xl font-bold text-[#043061] mb-1">Get Your Free Roof Estimate</h3>
+                  <p className="text-sm text-[#475569]">{variant.formTagline}</p>
                 </div>
 
                 {/* On the emergency variant, put the call CTA above the form */}
@@ -347,16 +347,16 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                   <Button
                     onClick={() => handleCallClick("form_top_call")}
                     data-testid="form-top-call-button"
-                    className="w-full h-14 mb-4 text-lg font-semibold bg-[#043061] hover:bg-[#021f40] text-white rounded-full shadow-lg flex items-center justify-center gap-2"
+                    className="w-full h-12 mb-3 text-base font-semibold bg-[#043061] hover:bg-[#021f40] text-white rounded-full shadow-lg flex items-center justify-center gap-2"
                   >
-                    <Phone className="w-5 h-5" />
+                    <Phone className="w-4 h-4" />
                     Call Roofing Monkeys Now
                   </Button>
                 )}
 
-                <form onSubmit={handleFormSubmit} className="space-y-4">
+                <form onSubmit={handleFormSubmit} className="space-y-3">
                   <div>
-                    <Label htmlFor="name" className="text-[#0F172A] font-medium">Full Name</Label>
+                    <Label htmlFor="name" className="text-sm text-[#0F172A] font-medium">Full Name</Label>
                     <Input
                       id="name"
                       name="name"
@@ -365,12 +365,12 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                       value={formData.name}
                       onChange={handleInputChange}
                       data-testid="input-name"
-                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                      className="mt-1 h-10 border-slate-200 focus:border-[#1D67CD]"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="phone" className="text-[#0F172A] font-medium">Phone Number</Label>
+                    <Label htmlFor="phone" className="text-sm text-[#0F172A] font-medium">Phone Number</Label>
                     <Input
                       id="phone"
                       name="phone"
@@ -379,12 +379,12 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                       value={formData.phone}
                       onChange={handleInputChange}
                       data-testid="input-phone"
-                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                      className="mt-1 h-10 border-slate-200 focus:border-[#1D67CD]"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="email" className="text-[#0F172A] font-medium">Email Address</Label>
+                    <Label htmlFor="email" className="text-sm text-[#0F172A] font-medium">Email Address</Label>
                     <Input
                       id="email"
                       name="email"
@@ -393,12 +393,12 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                       value={formData.email}
                       onChange={handleInputChange}
                       data-testid="input-email"
-                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                      className="mt-1 h-10 border-slate-200 focus:border-[#1D67CD]"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="address" className="text-[#0F172A] font-medium">Property Address</Label>
+                    <Label htmlFor="address" className="text-sm text-[#0F172A] font-medium">Property Address</Label>
                     <Input
                       id="address"
                       name="address"
@@ -407,14 +407,14 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                       value={formData.address}
                       onChange={handleInputChange}
                       data-testid="input-address"
-                      className="mt-1 h-12 border-slate-200 focus:border-[#1D67CD]"
+                      className="mt-1 h-10 border-slate-200 focus:border-[#1D67CD]"
                     />
                   </div>
 
                   <div>
-                    <Label className="text-[#0F172A] font-medium">Service Needed</Label>
+                    <Label className="text-sm text-[#0F172A] font-medium">Service Needed</Label>
                     <Select onValueChange={handleSelectChange} value={formData.projectType}>
-                      <SelectTrigger data-testid="select-project-type" className="mt-1 h-12 border-slate-200">
+                      <SelectTrigger data-testid="select-project-type" className="mt-1 h-10 border-slate-200">
                         <SelectValue placeholder="Select the service you need" />
                       </SelectTrigger>
                       <SelectContent>
@@ -432,7 +432,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                     type="submit"
                     disabled={isSubmitting}
                     data-testid="submit-form-button"
-                    className="w-full h-14 text-lg font-semibold bg-[#1D67CD] hover:bg-[#1854A8] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+                    className="w-full h-12 text-base font-semibold bg-[#1D67CD] hover:bg-[#1854A8] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
                   >
                     {isSubmitting ? "Submitting..." : (variant.phoneFirst ? variant.secondaryCta : variant.primaryCta)}
                   </Button>
@@ -444,7 +444,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                     onClick={() => handleCallClick("form_secondary_call")}
                     data-testid="form-secondary-call-button"
                     variant="outline"
-                    className="w-full h-12 mt-3 text-base font-semibold border-2 border-[#043061] text-[#043061] bg-transparent hover:bg-[#043061] hover:text-white rounded-full flex items-center justify-center gap-2"
+                    className="w-full h-10 mt-2 text-sm font-semibold border-2 border-[#043061] text-[#043061] bg-transparent hover:bg-[#043061] hover:text-white rounded-full flex items-center justify-center gap-2"
                   >
                     <Phone className="w-4 h-4" />
                     Call Roofing Monkeys

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin } from "lucide-react";
+import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin, CalendarCheck, Search, FileCheck } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
 import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
@@ -188,7 +188,7 @@ export default function BookingPage() {
           </div>
           <h1 className="text-3xl font-bold text-[#0F4A9C] mb-4">Appointment requested!</h1>
           <p className="text-[#475569] mb-6">
-            Your consultation is requested for <strong>{selectedDay?.fullDate}</strong> at <strong>{selectedTime}</strong>.
+            Your inspection is requested for <strong>{selectedDay?.fullDate}</strong> at <strong>{selectedTime}</strong>.
           </p>
           <p className="text-[#475569] mb-8">
             A member of our team will reach out shortly to confirm your appointment request. It is important you confirm your appointment due to high volume of requests.
@@ -249,7 +249,7 @@ export default function BookingPage() {
             <span>Information Received!</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mb-4">
-            You're Almost Done — Book Your Free Consultation
+            You're Almost Done — Book Your Free Inspection
           </h1>
           <p className="text-lg text-[#475569]">
             Choose a time that works best for you below.
@@ -259,7 +259,7 @@ export default function BookingPage() {
         {/* Lead Summary */}
         {leadData && (
           <div className="bg-white rounded-xl p-4 mb-8 border border-slate-200">
-            <p className="text-sm text-[#94A3B8] mb-1">Booking consultation for:</p>
+            <p className="text-sm text-[#94A3B8] mb-1">Booking inspection for:</p>
             <p className="font-semibold text-[#0F172A]">{leadData.name} • {leadData.phone}</p>
           </div>
         )}
@@ -270,8 +270,34 @@ export default function BookingPage() {
             <Clock className="w-5 h-5 text-[#1D67CD] flex-shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold text-[#0F172A]">Appointments fill quickly across the GTA</p>
-              <p className="text-sm text-[#475569]">Secure your spot now. Homeowners who book a consultation are prioritized for current promotions.</p>
+              <p className="text-sm text-[#475569]">Secure your spot now. Homeowners who book an inspection are prioritized for current promotions.</p>
             </div>
+          </div>
+        </div>
+
+        {/* 3-step process infographic */}
+        <div className="mb-10" data-testid="process-infographic">
+          <div className="text-center mb-6">
+            <span className="text-xs md:text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">How It Works</span>
+            <h2 className="text-xl md:text-2xl font-bold text-[#043061] mt-2">Three Simple Steps</h2>
+          </div>
+
+          <div className="process-steps">
+            {[
+              { n: 1, Icon: CalendarCheck, title: "Schedule an Inspection", body: "Pick a day and time that works for you below." },
+              { n: 2, Icon: Search,        title: "Our Team Inspects Your Roof", body: "A Roofing Monkeys crew comes on-site and inspects your roof." },
+              { n: 3, Icon: FileCheck,     title: "Same-Day Quote", body: "You get a clear, written, no-obligation quote the same day." },
+            ].map((s, i) => (
+              <div className="process-step-card" data-testid={`process-step-${i}`} key={s.n}>
+                <span className="process-step-num" aria-hidden="true">{String(s.n).padStart(2, "0")}</span>
+                <div className="process-step-icon">
+                  <s.Icon className="w-6 h-6" />
+                </div>
+                <h3 className="process-step-title">{s.title}</h3>
+                <p className="process-step-body">{s.body}</p>
+                {i < 2 && <span className="process-arrow" aria-hidden="true">→</span>}
+              </div>
+            ))}
           </div>
         </div>
 

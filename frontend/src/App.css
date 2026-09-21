@@ -226,6 +226,101 @@
   border-bottom: 1px solid #E2E8F0;
 }
 
+/* 3-step process infographic (booking page) */
+.process-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .process-steps {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.25rem;
+  }
+}
+
+.process-step-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(29, 103, 205, 0.15);
+  border-radius: 1rem;
+  padding: 1.5rem 1.25rem 1.25rem;
+  box-shadow: 0 8px 20px -12px rgba(4, 48, 97, 0.25);
+  overflow: hidden;
+}
+
+.process-step-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #043061 0%, #1D67CD 50%, #59C8EE 100%);
+}
+
+.process-step-num {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+  font-family: "Playfair Display", serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #043061;
+  opacity: 0.1;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.process-step-icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #1D67CD 0%, #59C8EE 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+  box-shadow: 0 6px 14px -4px rgba(29, 103, 205, 0.5);
+}
+
+.process-step-title {
+  font-family: "Playfair Display", serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #043061;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+.process-step-body {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.process-arrow {
+  display: none;
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #59C8EE;
+  z-index: 2;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .process-arrow {
+    display: block;
+  }
+}
+
 /* Booking Calendar */
 .calendar-day {
   padding: 1rem;
@@ -340,10 +435,17 @@
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 1rem;
+  max-height: 220px;
+  border-radius: 0.875rem;
   overflow: hidden;
-  box-shadow: 0 20px 40px -12px rgba(4, 48, 97, 0.55);
+  box-shadow: 0 16px 32px -12px rgba(4, 48, 97, 0.5);
   background: #043061;
+}
+
+@media (min-width: 1024px) {
+  .hero-video-wrap {
+    max-height: 200px;
+  }
 }
 
 .hero-video {
