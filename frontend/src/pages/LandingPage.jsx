@@ -339,8 +339,20 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
               <div className="form-card p-6 md:p-8">
                 <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-[#043061] mb-2">Get Your Free Roof Estimate</h3>
-                  <p className="text-[#475569]">Takes 30 seconds • No obligation</p>
+                  <p className="text-[#475569]">{variant.formTagline}</p>
                 </div>
+
+                {/* On the emergency variant, put the call CTA above the form */}
+                {variant.phoneFirst && (
+                  <Button
+                    onClick={() => handleCallClick("form_top_call")}
+                    data-testid="form-top-call-button"
+                    className="w-full h-14 mb-4 text-lg font-semibold bg-[#043061] hover:bg-[#021f40] text-white rounded-full shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <Phone className="w-5 h-5" />
+                    Call Roofing Monkeys Now
+                  </Button>
+                )}
 
                 <form onSubmit={handleFormSubmit} className="space-y-4">
                   <div>
@@ -422,9 +434,22 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                     data-testid="submit-form-button"
                     className="w-full h-14 text-lg font-semibold bg-[#1D67CD] hover:bg-[#1854A8] text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
                   >
-                    {isSubmitting ? "Submitting..." : "Get My Free Quote"}
+                    {isSubmitting ? "Submitting..." : (variant.phoneFirst ? variant.secondaryCta : variant.primaryCta)}
                   </Button>
                 </form>
+
+                {/* Secondary "call" CTA under the form on non-emergency pages */}
+                {!variant.phoneFirst && (
+                  <Button
+                    onClick={() => handleCallClick("form_secondary_call")}
+                    data-testid="form-secondary-call-button"
+                    variant="outline"
+                    className="w-full h-12 mt-3 text-base font-semibold border-2 border-[#043061] text-[#043061] bg-transparent hover:bg-[#043061] hover:text-white rounded-full flex items-center justify-center gap-2"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Call Roofing Monkeys
+                  </Button>
+                )}
 
                 <p className="text-center text-sm text-[#94A3B8] mt-4">
                   Serious inquiries only — limited availability each month.
@@ -545,7 +570,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
             <span className="font-medium">Limited availability across the Greater Toronto Area</span>
           </div>
           <Button
-            onClick={scrollToForm}
+            onClick={variant.phoneFirst ? () => handleCallClick("offer_section") : scrollToForm}
             data-testid="check-availability-button"
             className="btn-cta text-lg px-8"
           >
@@ -677,6 +702,42 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
         </div>
       </section>
 
+      {/* Service-specific body copy (About) — helps Google & humans understand the page */}
+      <section className="section-padding bg-white" data-testid="about-section">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-8">
+            <span className="text-sm uppercase tracking-widest text-[#1D67CD] font-semibold">Details</span>
+            <h2 className="text-3xl md:text-4xl font-bold text-[#0F4A9C] mt-4">
+              {variant.aboutH2}
+            </h2>
+          </div>
+          <div className="space-y-5 text-[#475569] leading-relaxed text-base md:text-lg">
+            {variant.aboutParagraphs.map((p, i) => (
+              <p key={i} data-testid={`about-paragraph-${i}`}>{p}</p>
+            ))}
+          </div>
+          <div className="mt-10 flex flex-col sm:flex-row gap-3 justify-center">
+            <Button
+              onClick={variant.phoneFirst ? () => handleCallClick("about_section") : scrollToForm}
+              data-testid="about-primary-cta"
+              className="btn-cta text-base px-6 flex items-center justify-center gap-2"
+            >
+              {variant.phoneFirst && <Phone className="w-4 h-4" />}
+              {variant.phoneFirst ? variant.primaryCta : variant.primaryCta}
+            </Button>
+            <Button
+              onClick={variant.phoneFirst ? scrollToForm : () => handleCallClick("about_section")}
+              data-testid="about-secondary-cta"
+              variant="outline"
+              className="text-base px-6 border-2 border-[#043061] text-[#043061] bg-transparent hover:bg-[#043061] hover:text-white rounded-full flex items-center justify-center gap-2"
+            >
+              {!variant.phoneFirst && <Phone className="w-4 h-4" />}
+              {variant.phoneFirst ? variant.secondaryCta : variant.secondaryCta}
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ Section */}
       <section className="section-padding bg-white" data-testid="faq-section">
         <div className="max-w-3xl mx-auto">
@@ -723,21 +784,43 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
             {variant.finalCtaBody}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              onClick={scrollToForm}
-              data-testid="final-cta-schedule-button"
-              className="btn-cta text-lg px-8"
-            >
-              Schedule My Free Consultation
-            </Button>
-            <Button
-              onClick={() => handleCallClick("final_cta")}
-              data-testid="final-cta-call-button"
-              className="btn-blue text-lg px-8 flex items-center justify-center gap-2"
-            >
-              <Phone className="w-5 h-5" />
-              Call Now
-            </Button>
+            {variant.phoneFirst ? (
+              <>
+                <Button
+                  onClick={() => handleCallClick("final_cta")}
+                  data-testid="final-cta-call-button"
+                  className="btn-cta text-lg px-8 flex items-center justify-center gap-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  {variant.primaryCta}
+                </Button>
+                <Button
+                  onClick={scrollToForm}
+                  data-testid="final-cta-schedule-button"
+                  className="btn-blue text-lg px-8"
+                >
+                  {variant.secondaryCta}
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  onClick={scrollToForm}
+                  data-testid="final-cta-schedule-button"
+                  className="btn-cta text-lg px-8"
+                >
+                  {variant.primaryCta}
+                </Button>
+                <Button
+                  onClick={() => handleCallClick("final_cta")}
+                  data-testid="final-cta-call-button"
+                  className="btn-blue text-lg px-8 flex items-center justify-center gap-2"
+                >
+                  <Phone className="w-5 h-5" />
+                  {variant.secondaryCta}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </section>
@@ -763,21 +846,43 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
       {/* Sticky Mobile Bar */}
       <div className="sticky-mobile-bar md:hidden" data-testid="sticky-mobile-bar">
         <div className="flex gap-3">
-          <Button
-            onClick={() => handleCallClick("sticky_mobile")}
-            data-testid="mobile-call-button"
-            className="flex-1 h-12 bg-[#043061] hover:bg-[#021f40] text-white font-semibold rounded-full flex items-center justify-center gap-2"
-          >
-            <Phone className="w-5 h-5" />
-            Call Now
-          </Button>
-          <Button
-            onClick={scrollToForm}
-            data-testid="mobile-quote-button"
-            className="flex-1 h-12 bg-[#1D67CD] hover:bg-[#1854A8] text-white font-semibold rounded-full"
-          >
-            Get Free Quote
-          </Button>
+          {variant.phoneFirst ? (
+            <>
+              <Button
+                onClick={() => handleCallClick("sticky_mobile")}
+                data-testid="mobile-call-button"
+                className="flex-[2] h-12 bg-[#043061] hover:bg-[#021f40] text-white font-semibold rounded-full flex items-center justify-center gap-2"
+              >
+                <Phone className="w-5 h-5" />
+                Call Now
+              </Button>
+              <Button
+                onClick={scrollToForm}
+                data-testid="mobile-quote-button"
+                className="flex-1 h-12 bg-[#1D67CD] hover:bg-[#1854A8] text-white font-semibold rounded-full text-sm"
+              >
+                Request Inspection
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                onClick={() => handleCallClick("sticky_mobile")}
+                data-testid="mobile-call-button"
+                className="flex-1 h-12 bg-[#043061] hover:bg-[#021f40] text-white font-semibold rounded-full flex items-center justify-center gap-2"
+              >
+                <Phone className="w-5 h-5" />
+                Call
+              </Button>
+              <Button
+                onClick={scrollToForm}
+                data-testid="mobile-quote-button"
+                className="flex-[2] h-12 bg-[#1D67CD] hover:bg-[#1854A8] text-white font-semibold rounded-full text-sm"
+              >
+                Get Free Estimate
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>
