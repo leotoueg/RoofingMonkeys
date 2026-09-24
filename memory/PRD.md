@@ -34,6 +34,15 @@ Rebrand the high-converting Google Ads landing page (cloned from `leotoueg/Apex-
 5. Webhook integration placeholders ready to be wired up later (`FORM_WEBHOOK_URL`, `BOOKING_WEBHOOK_URL`).
 6. All interactive elements have `data-testid` attributes.
 
+## What's Been Implemented (2026-02)
+- **Google Ads conversion tracking pipeline (v2)** — canonical dataLayer events for Ads conversions:
+  - `call_click` — fires on every `tel:` tap (header, hero, form CTAs, offer, about, final CTA, footer, sticky mobile bar, booking header, booked-success).
+  - `form_submit` + `generate_lead` — landing page form submission (unchanged event names, now enriched).
+  - `booking_request` + `book_appointment` — booking page confirmation (canonical name added alongside legacy).
+- Every event now auto-injects `service_slug` (`home` / `shingles` / `flat-roofs` / `soffit-fascia-gutters` / `emergency-repairs`) and `page_variant` from a sessionStorage-persisted `setServiceContext` set on landing.
+- `user_data` object (email, phone E.164, first/last name, street, country) added to form_submit + booking_request for **Google Ads Enhanced Conversions** — GTM hashes at fire time.
+- `/app/GTM_SETUP.md` — full step-by-step doc for setting up 15 Google Ads conversion actions (3 events × 5 services), 3 GTM tags via Lookup Tables, Conversion Linker, Enhanced Conversions, and per-campaign goal linking. Includes recommended CAD conversion values and bidding strategy per service.
+
 ## What's Been Implemented (2026-01)
 - Cloned `Apex-Landing-Page` repo into `/app`, preserved `.env` and `.git`.
 - Rebranded all copy → Roofing Monkeys / GTA / Roofing services.

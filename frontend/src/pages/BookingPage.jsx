@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Phone, Calendar, Clock, CheckCircle, ArrowLeft, MapPin, CalendarCheck, Search, FileCheck, ChevronRight } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
-import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
+import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack, buildUserData } from "../lib/tracking";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
 const PHONE_HREF = "tel:+16479541671";
@@ -69,6 +69,15 @@ export default function BookingPage() {
   }, []);
 
   const handleCallClick = (sourceLocation = "header") => {
+    // Canonical event for Google Ads conversion tag.
+    pushToDataLayer("call_click", {
+      event_category: "Conversion",
+      event_label: "Click to Call",
+      phone_number: PHONE_NUMBER,
+      page: "booking",
+      location: sourceLocation,
+    });
+    // Legacy events kept for existing GA4 / Meta setups
     pushToDataLayer("click_call_button", {
       event_category: "Engagement",
       event_label: "Click to Call",
@@ -118,6 +127,23 @@ export default function BookingPage() {
         });
       }
 
+      // Canonical booking event for Google Ads. service_slug + page_variant
+      // are auto-injected by pushDataLayerEvent based on the landing page
+      // the user arrived from (persisted via setServiceContext).
+      const userData = buildUserData(leadData || {});
+      pushToDataLayer("booking_request", {
+        event_category: "Conversion",
+        event_label: "Appointment Requested",
+        appointment_date: selectedDay.fullDate,
+        appointment_time: selectedTime,
+        project_type: leadData?.projectType || "unknown",
+        page: "booking",
+        currency: "CAD",
+        value: 0,
+        event_id: eventId,
+        user_data: userData,
+      });
+      // Legacy events kept for existing GA4 / Meta setups
       pushToDataLayer("book_appointment", {
         event_category: "Conversion",
         event_label: "Appointment Booked",
@@ -135,8 +161,6 @@ export default function BookingPage() {
         project_type: leadData?.projectType || "unknown",
         event_id: eventId,
       });
-
-      // Meta Pixel — standard "Schedule" event (fires on appointment request)
       fbqTrack(
         "Schedule",
         {
@@ -154,6 +178,19 @@ export default function BookingPage() {
       sessionStorage.removeItem("leadData");
     } catch (error) {
       console.error("Webhook error:", error);
+      const userData = buildUserData(leadData || {});
+      pushToDataLayer("booking_request", {
+        event_category: "Conversion",
+        event_label: "Appointment Requested",
+        appointment_date: selectedDay.fullDate,
+        appointment_time: selectedTime,
+        project_type: leadData?.projectType || "unknown",
+        page: "booking",
+        currency: "CAD",
+        value: 0,
+        event_id: eventId,
+        user_data: userData,
+      });
       pushToDataLayer("book_appointment", {
         event_category: "Conversion",
         event_label: "Appointment Booked",

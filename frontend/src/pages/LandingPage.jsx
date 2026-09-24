@@ -6,7 +6,7 @@ import { Label } from "../components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Button } from "../components/ui/button";
 import { toast } from "sonner";
-import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack } from "../lib/tracking";
+import { initTracking, getTrackingContext, pushDataLayerEvent, newEventId, fbqTrack, setServiceContext, buildUserData, toServiceSlug } from "../lib/tracking";
 import { GENERAL_VARIANT, ALL_SERVICES } from "../lib/serviceVariants";
 
 const PHONE_NUMBER = "+1 (647) 954-1671";
@@ -63,6 +63,9 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
   // First-touch attribution + page_view + dynamic <title>/<meta description>
   useEffect(() => {
     initTracking();
+    // Persist which service variant this session belongs to so downstream
+    // events (booking, call_click on booking page) inherit the same slug.
+    setServiceContext(variant.serviceKey || "", variant.slug || "/");
     pushToDataLayer("page_view", {
       page: "landing",
       page_path: variant.slug || "/",
@@ -135,6 +138,8 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
       }
 
       // Push GTM dataLayer event (canonical + GA4 standard)
+      // service_slug + page_variant are auto-injected by pushDataLayerEvent.
+      const userData = buildUserData(formData);
       pushToDataLayer("form_submit", {
         event_category: "Lead",
         event_label: "Lead Form Submission",
@@ -142,6 +147,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
         project_type: formData.projectType,
         page: "landing",
         event_id: eventId,
+        user_data: userData,
       });
       pushToDataLayer("generate_lead", {
         currency: "CAD",
@@ -149,6 +155,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
         form_name: "lead_capture",
         project_type: formData.projectType,
         event_id: eventId,
+        user_data: userData,
       });
 
       // Meta Pixel — standard "Lead" event (fires on lead form submit)
@@ -175,6 +182,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
       console.error("Webhook error:", error);
       // Still proceed even if webhook fails
       sessionStorage.setItem("leadData", JSON.stringify(formData));
+      const userData = buildUserData(formData);
       pushToDataLayer("form_submit", {
         event_category: "Lead",
         event_label: "Lead Form Submission",
@@ -182,6 +190,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
         project_type: formData.projectType,
         page: "landing",
         event_id: eventId,
+        user_data: userData,
       });
       pushToDataLayer("generate_lead", {
         currency: "CAD",
@@ -189,6 +198,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
         form_name: "lead_capture",
         project_type: formData.projectType,
         event_id: eventId,
+        user_data: userData,
       });
       toast.success("Thank you! Redirecting to book your inspection...");
       setTimeout(() => {
@@ -200,6 +210,16 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
   };
 
   const handleCallClick = (sourceLocation = "header") => {
+    // Canonical event for Google Ads conversion tag (all tel: taps).
+    // service_slug + page_variant auto-attached by pushDataLayerEvent.
+    pushToDataLayer("call_click", {
+      event_category: "Conversion",
+      event_label: "Click to Call",
+      phone_number: PHONE_NUMBER,
+      page: "landing",
+      location: sourceLocation,
+    });
+    // Legacy events kept for existing GA4 / Meta setups
     pushToDataLayer("click_call_button", {
       event_category: "Engagement",
       event_label: "Click to Call",
@@ -207,7 +227,6 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
       page: "landing",
       location: sourceLocation,
     });
-    // Also push the GA4-standard contact event so it shows up either way
     pushToDataLayer("phone_call_click", {
       phone_number: PHONE_NUMBER,
       page: "landing",
