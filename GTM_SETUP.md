@@ -1,6 +1,6 @@
 # Roofing Monkeys — Google Tag Manager & Google Ads Conversion Setup
 
-**Container:** `GTM-PKD4WCJV`
+**Container:** `GTM-W42NGRW8`
 **Strategy:** 5 search campaigns (one per service) → 15 Google Ads conversion actions (3 events × 5 services) → 3 GTM conversion tags (via Lookup Tables). Enhanced Conversions ON.
 
 ---
@@ -142,7 +142,7 @@ That's it at the account level. GTM will do the hashing per-tag in §5.
 
 ## 3. GTM — Built-In Variables & Data Layer Variables
 
-**Path:** GTM (`GTM-PKD4WCJV`) → **Variables**.
+**Path:** GTM (`GTM-W42NGRW8`) → **Variables**.
 
 ### 3a. Enable built-ins
 

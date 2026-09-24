@@ -15,7 +15,7 @@ LeadConnector webhooks. No backend required.
    - SPA rewrites so `/booking` and deep links don't 404 on refresh
    - Long cache headers for `/static/*` and image folders
 3. **No environment variables needed.** All third-party IDs are inlined:
-   - GTM container: `GTM-PKD4WCJV`
+   - GTM container: `GTM-W42NGRW8`
    - Meta Pixel: `1310983044526111`
    - Microsoft Clarity: `w0bf7lchr8`
    - PostHog: `phc_xAvL2Iq4tFmANRE7kzbKwaSqp1HJjN7x48s3vr0CMjs`
