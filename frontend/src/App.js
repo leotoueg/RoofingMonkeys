@@ -18,6 +18,7 @@ function App() {
           <Route path="/flat-roofs" element={<LandingPage variant={VARIANTS.flatRoofs} />} />
           <Route path="/soffit-fascia-gutters" element={<LandingPage variant={VARIANTS.soffit} />} />
           <Route path="/emergency-repairs" element={<LandingPage variant={VARIANTS.emergency} />} />
+          <Route path="/storm-damage-repair" element={<LandingPage variant={VARIANTS.stormDamage} />} />
 
           <Route path="/booking" element={<BookingPage />} />
         </Routes>

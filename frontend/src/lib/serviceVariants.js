@@ -275,10 +275,65 @@ export const EMERGENCY_VARIANT = build({
   ],
 });
 
+export const STORM_DAMAGE_VARIANT = build({
+  slug: "/storm-damage-repair",
+  serviceKey: "storm-damage",
+  primaryServiceKey: "emergency",
+  pageTitle: "Storm Damage Roof Repair Toronto & GTA — Insurance Claims Welcome | Roofing Monkeys",
+  metaDescription: "Storm damage roof repair across Toronto and the GTA. Wind, hail and tree impact repairs, insurance-claim documentation, licensed and insured Roofing Monkeys crews — call now or request an inspection.",
+
+  serviceLabel: "Storm Damage Roof Repair in Toronto & the GTA",
+  heroBadge: "Storm Damage Roof Repair — Toronto & GTA",
+  heroH1: "Storm Damage Roof Repair in Toronto & the GTA — Insurance Claims Welcome",
+  heroSubtitle: "Wind-torn shingles, hail damage, tree impact or a leak that showed up after the last storm? Roofing Monkeys is a licensed and insured Toronto roofing company handling storm damage repairs across the GTA — we photograph the damage, write the scope, and can help move your insurance claim forward.",
+  heroBullets: [
+    "Wind, Hail & Tree-Impact Roof Repair Across the GTA",
+    "Insurance-Claim Photos & Itemized Written Scope",
+    "Emergency Tarping Available — Stops the Leak Today",
+    "Licensed, WSIB-Covered & Fully Insured",
+  ],
+
+  // Phone-first like emergency — storm calls are urgent
+  primaryCta: "Call Roofing Monkeys Now",
+  secondaryCta: "Request Storm Damage Inspection",
+  phoneFirst: true,
+  formTagline: "Prefer not to call? Request an inspection and we'll ring you back",
+
+  servicesEyebrow: "Also Available",
+  servicesH2: "Other Roofing Services Roofing Monkeys Offers",
+  servicesSubtitle: "Beyond storm damage repair, our GTA crews handle full shingle, flat and metal roof replacements — plus soffit, fascia and eavestrough across Toronto and the GTA.",
+
+  offerEyebrow: "Storm Response",
+  offerH2: "Roof Damage From the Last Storm? Call Roofing Monkeys",
+  offerBody: "If wind, hail or a fallen branch damaged your roof, call our line and we'll schedule a same-week storm damage inspection. If your repair is going through home insurance, we'll photograph the damage on-site and give you a written itemized scope you can hand to your adjuster.",
+  offerCta: "Call Roofing Monkeys Now",
+
+  processH2: "How Storm Damage Roof Repair Works",
+
+  aboutH2: "About Storm Damage Roof Repair With Roofing Monkeys",
+  aboutParagraphs: [
+    "Toronto and the GTA see wind gusts, hail and heavy summer storms every year — and asphalt shingle roofs take the hit. Lifted or torn shingles, dented metal flashing, missing ridge cap, damaged vents and impact from fallen branches are the four most common storm damage repairs we do. Left alone, any of them will eventually turn into a slow interior leak.",
+    "The fastest way to get help is to call us directly — the number on this page reaches a real Roofing Monkeys team member, not a call centre. If the roof is actively leaking we can walk you through emergency tarping over the phone before we come out. If you'd rather not call, submit the storm damage inspection request form and we'll ring you back to book the site visit.",
+    "Once we're on-site, we document every damaged area with photos, identify what needs to be repaired versus fully replaced, and give you a clear written scope. If your repair is being submitted to home insurance, we can provide the itemized scope of repair your adjuster will need and can meet them on-site if that helps move the claim faster. Every storm damage repair is backed by our workmanship warranty and completed by our licensed, WSIB-covered, fully insured crews.",
+  ],
+
+  finalCtaH2: "Storm Damaged Your Roof?",
+  finalCtaBody: "Call Roofing Monkeys for the fastest response — or request a storm damage inspection online and we'll ring you back with an appointment.",
+
+  faqItems: [
+    { question: "Does home insurance cover storm damage roof repair?", answer: "Most home insurance policies in Ontario cover sudden storm damage — wind, hail, and tree impact are the three most common covered causes. Wear-and-tear is not covered. We can photograph the damage and provide an itemized written scope of repair to help your adjuster process the claim." },
+    { question: "How fast can Roofing Monkeys inspect my storm damaged roof?", answer: "Our fastest response is always a phone call — the number on this page reaches a real Roofing Monkeys team member. Once we've spoken to you we book your on-site storm damage inspection as fast as the workload and weather allow." },
+    { question: "Will you tarp my roof if it's actively leaking after the storm?", answer: "When it's the right call, yes — we install a proper storm tarp that holds through Toronto weather until the permanent repair is done. In some cases we can go straight to a permanent repair on the first visit. We'll walk you through it on the phone before we come out." },
+    { question: "What kinds of storm damage do you repair?", answer: "Wind-lifted or torn shingles, hail-damaged shingles and vents, missing ridge cap and drip edge, damaged step flashing, fallen-branch impact damage, and any leaks that showed up after the storm. If it's on your roofline and the storm caused it, we can fix it." },
+    { question: "Are you licensed and insured?", answer: "Yes — Roofing Monkeys is fully licensed, WSIB-covered and carries full liability insurance. Every storm damage repair we complete is backed by our workmanship warranty." },
+  ],
+});
+
 export const VARIANTS = {
   general: GENERAL_VARIANT,
   shingles: SHINGLES_VARIANT,
   flatRoofs: FLAT_ROOF_VARIANT,
   soffit: SOFFIT_VARIANT,
   emergency: EMERGENCY_VARIANT,
+  stormDamage: STORM_DAMAGE_VARIANT,
 };

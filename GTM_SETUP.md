@@ -13,8 +13,8 @@ Every event carries these fields automatically (already coded in `/frontend/src/
 |---|---|---|
 | `event` | `form_submit`, `booking_request`, `call_click` | Canonical trigger names |
 | `event_id` | `d22fd328-1869-...` | UUID per event — used for deduplication |
-| `service_slug` | `home`, `shingles`, `flat-roofs`, `soffit-fascia-gutters`, `emergency-repairs` | Which landing variant the session started on. Booking + call events inherit this from `sessionStorage` |
-| `page_variant` | `/`, `/shingles`, `/flat-roofs`, `/soffit-fascia-gutters`, `/emergency-repairs` | Route path |
+| `service_slug` | `home`, `shingles`, `flat-roofs`, `soffit-fascia-gutters`, `emergency-repairs`, `storm-damage-repair` | Which landing variant the session started on. Booking + call events inherit this from `sessionStorage` |
+| `page_variant` | `/`, `/shingles`, `/flat-roofs`, `/soffit-fascia-gutters`, `/emergency-repairs`, `/storm-damage-repair` | Route path |
 | `gclid`, `gbraid`, `wbraid`, `fbclid`, `msclkid` | `Cj0KCQ...` | First-touch, persisted for the session |
 | `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content` | `google` / `cpc` / ... | First-touch |
 | `landing_url`, `referrer` | full URL | First-touch |

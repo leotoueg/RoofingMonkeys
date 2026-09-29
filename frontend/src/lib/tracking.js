@@ -14,6 +14,7 @@ const SERVICE_KEY_TO_SLUG = {
   "flat-roof": "flat-roofs",
   soffit: "soffit-fascia-gutters",
   emergency: "emergency-repairs",
+  "storm-damage": "storm-damage-repair",
 };
 
 export function toServiceSlug(serviceKey) {

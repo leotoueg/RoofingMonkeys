@@ -443,6 +443,7 @@ export default function LandingPage({ variant = GENERAL_VARIANT }) {
                         <SelectItem value="metal-roof">Metal Roof</SelectItem>
                         <SelectItem value="soffit">Soffit, Fascia &amp; Gutters</SelectItem>
                         <SelectItem value="emergency">Emergency Repair</SelectItem>
+                        <SelectItem value="storm-damage">Storm Damage (Insurance)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
